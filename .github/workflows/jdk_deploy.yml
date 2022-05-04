@@ -48,7 +48,7 @@ jobs:
         uses: garygrossgarten/github-action-ssh@v0.6.3
         with:
           command: |
-            cd ${{ inputs.name }}_v${{ inputs.version }} &&
+            cd ${{ inputs.app_name }}_v${{ inputs.version }} &&
             tar xf ${{ inputs.tar_name }}.tar &&
             ln -sf ~/${{ inputs.app_name }}_v${{ inputs.version }}/${{ inputs.tar_name }}/bin/${{ inputs.tar_name }} /usr/local/bin/${{ inputs.app_name }} &&
             systemctl restart ${{ inputs.app_name }}
