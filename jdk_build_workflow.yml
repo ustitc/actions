@@ -1,0 +1,40 @@
+name: Build workflow
+
+on:
+  workflow_call:
+    inputs:
+      jdk_version:
+        required: true
+        type: string
+      jdk_distribution:
+        required: true
+        type: string
+      distribution_path:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ inputs.jdk_version }}
+          distribution: ${{ inputs.jdk_distribution }}
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: Build
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
+      - name: Upload distribution
+        uses: actions/upload-artifact@v2
+        with:
+          name: distribution
+          path: ${{ inputs.distribution_path }}
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxMetaspaceSize=2048m"
